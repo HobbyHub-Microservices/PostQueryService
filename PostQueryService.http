@@ -1,0 +1,6 @@
+@PostQueryService_HostAddress = http://localhost:5072
+
+GET {{PostQueryService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
