@@ -71,7 +71,7 @@ public class PostRepo : IPostRepo
         }
     }
 
-    public async Task DeletedUser(string userName)
+    public async Task DeletedUserPosts(string userName)
     {
         if (string.IsNullOrEmpty(userName))
         {
@@ -84,7 +84,8 @@ public class PostRepo : IPostRepo
 
             if (postsToUpdate.Any())
             {
-                await postsToUpdate.ForEachAsync(p => p.UserName = "deleted_user");
+                // await postsToUpdate.ForEachAsync(p => p.UserName = "deleted_user");
+                _context.ViewPosts.RemoveRange(postsToUpdate);
                 await _context.SaveChangesAsync();
             }
         }

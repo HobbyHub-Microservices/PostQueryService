@@ -17,7 +17,7 @@ public interface IPostRepo
     
     Task UpdateHobbyName(string oldName, string newName);
     
-    Task DeletedUser(string userName);
+    Task DeletedUserPosts(string userName);
     
     Task UpdateUserName(string oldName, string newName);
     

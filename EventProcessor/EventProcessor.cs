@@ -2,6 +2,7 @@
 using AutoMapper;
 using PostQueryService.Data;
 using PostQueryService.DTO_s;
+using PostQueryService.DTO_s.User;
 using PostQueryService.Models;
 
 namespace PostQueryService.EventProcessor;
@@ -32,6 +33,12 @@ public class EventProcessor : IEventProcessor
                 Console.WriteLine(message);
                 DeleteHobby(message);
                 break;
+            case EventType.UserEdited:
+                Console.WriteLine("Not implemented yet");
+                break;
+            case EventType.UserDeleted:
+                DeleteUser(message);
+                break;
        
         }
     }
@@ -54,6 +61,18 @@ public class EventProcessor : IEventProcessor
             {
                 Console.WriteLine("--> Hobby_Deleted");
                 return EventType.HobbyDeleted; 
+            }
+            
+            if (eventType?.Event == "User_Edited")
+            {
+                Console.WriteLine("--> User_Edited");
+                return EventType.UserEdited;
+            }
+            
+            if (eventType?.Event == "User_Deleted")
+            {
+                Console.WriteLine("--> User_Deleted");
+                return EventType.UserDeleted;
             }
         }
         catch (Exception ex)
@@ -111,11 +130,35 @@ public class EventProcessor : IEventProcessor
             }
         }
     }
+    
+    private async Task DeleteUser(string userPublishedMessage)
+    {
+        using (var scope = _serviceScopeFactory.CreateScope())
+        {
+            var repo = scope.ServiceProvider.GetRequiredService<IPostRepo>();
+            var userPublishedEventDto = JsonSerializer.Deserialize<UserDeletePublishedDto>(userPublishedMessage);
+    
+            try
+            {
+                Console.WriteLine($"UserName = {userPublishedEventDto.Name}");
+                // Perform the update using the repository method
+                await repo.DeletedUserPosts(userPublishedEventDto.Name);
+                Console.WriteLine($"Successfully deleted user posts");
+     
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Could not add User to DB {ex.Message}");
+            }
+        }
+    }
 
 }
 enum EventType
 {
     HobbyEdited,
     HobbyDeleted,
+    UserEdited,
+    UserDeleted,
     Undetermined
 }

@@ -108,3 +108,4 @@ C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\obj\Debug\
 C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\obj\Debug\net8.0\PostQueryService.pdb
 C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\obj\Debug\net8.0\PostQueryService.genruntimeconfig.cache
 C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\obj\Debug\net8.0\ref\PostQueryService.dll
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\obj\Debug\net8.0\PostQueryService.sourcelink.json

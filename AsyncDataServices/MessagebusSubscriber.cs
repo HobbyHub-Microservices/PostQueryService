@@ -34,9 +34,12 @@ public class MessagebusSubscriber : BackgroundService
         _channel = _connection.CreateModel();
 
         _channel.ExchangeDeclare(exchange: "post.topic", type: ExchangeType.Topic, durable: true);
+        _channel.ExchangeDeclare(exchange: "hobby.query.topic", type: ExchangeType.Topic, durable: true);
+        _channel.ExchangeDeclare(exchange: "user.query.topic", type: ExchangeType.Topic, durable: true);
         _queueName = _channel.QueueDeclare().QueueName;
         
-        _channel.QueueBind(queue: _queueName, exchange: "hobby.topic", routingKey: "hobby.topic.*");
+        _channel.QueueBind(queue: _queueName, exchange: "hobby.query.topic", routingKey: "hobby.topic.*");
+        _channel.QueueBind(queue: _queueName, exchange: "user.query.topic", routingKey: "user.topic.*");
         
         Console.WriteLine("--> Listening on the Message Bus");
             
