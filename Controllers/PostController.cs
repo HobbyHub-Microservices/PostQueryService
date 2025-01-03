@@ -24,6 +24,7 @@ public class PostController : ControllerBase
     }
     
     [HttpGet]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<ActionResult<IEnumerable<PostViewDto>>> GetAllPosts()
     {
         Console.WriteLine("--> Getting posts from DB...");

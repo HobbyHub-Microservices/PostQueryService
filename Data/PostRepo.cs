@@ -18,7 +18,9 @@ public class PostRepo : IPostRepo
 
     public async Task<IEnumerable<ViewPost>> GetAllPostsAsync()
     {
-        return await _context.ViewPosts.ToListAsync();
+        return await _context.ViewPosts
+            .OrderByDescending(post => post.CreatedAt)
+            .ToListAsync();
     }
 
     public async Task<ViewPost> GetPostByIdAsync(int postId)
@@ -78,9 +80,11 @@ public class PostRepo : IPostRepo
             throw new ArgumentException("User name cannot be null or empty", nameof(userName));
         }
         
+        Console.WriteLine("Trying to delete " + userName.ToLower());
+        
         try
         {
-            var postsToUpdate = _context.ViewPosts.Where(p => p.UserName == userName);
+            var postsToUpdate = _context.ViewPosts.Where(p => p.UserName == userName.ToLower());
 
             if (postsToUpdate.Any())
             {
