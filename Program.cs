@@ -43,6 +43,15 @@ if (builder.Environment.IsProduction())
     }
     
     builder.Configuration["ConnectionStrings:PostgressConn"] = $"Host={dbHost};Port={dbPort};Database=Posts;Username={dbUser};Password={dbPassword};Trust Server Certificate=true;";
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("PostgressConn")));
+    
+    builder.Configuration["Keycloak:ClientId"] = Environment.GetEnvironmentVariable("KEYCLOAK_CLIENTID");
+    builder.Configuration["Keycloak:ClientSecret"] = Environment.GetEnvironmentVariable("KEYCLOAK_CLIENTSECRET");
+    
+    builder.Configuration["Keycloak:Authority"] = Environment.GetEnvironmentVariable("KEYCLOAK_AUTHORITY");
+    builder.Configuration["Keycloak:Audience"] = Environment.GetEnvironmentVariable("KEYCLOAK_AUDIENCE");
+    builder.Configuration["Keycloak:AuthenticationURL"] = Environment.GetEnvironmentVariable("KEYCLOAK_AUTHENTICATION_URL");
 }
 else
 {
@@ -53,6 +62,7 @@ else
     // builder.Services.AddDbContext<AppDbContext>(opt => 
     //     opt.UseInMemoryDatabase("InMem")); 
 }
+builder.Services.AddAuthorization();
 var integrationMode = builder.Configuration.GetValue<bool>("IntegrationMode");
 if (!integrationMode)
 {

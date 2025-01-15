@@ -47,7 +47,7 @@ public class PostController : ControllerBase
                 
         }
     
-    [AllowAnonymous]
+    [Authorize]
     [HttpGet]
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<ActionResult<IEnumerable<PostViewDto>>> GetAllPosts()
@@ -61,7 +61,7 @@ public class PostController : ControllerBase
         return Ok(_mapper.Map<IEnumerable<PostViewDto>>(postItems));
     }
     
-    [AllowAnonymous]
+    [Authorize]
     [HttpGet("{id}", Name = "GetPostById")]
     public async Task<ActionResult<PostViewDto>> GetPostById(int id)
     {
@@ -75,7 +75,7 @@ public class PostController : ControllerBase
         return NotFound(); // Return 404 if no post is found
     }
     
-    [AllowAnonymous]
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<PostViewDto>> CreatePost(PostCreateDto postCreateDto)
     {
@@ -99,11 +99,33 @@ public class PostController : ControllerBase
             Console.WriteLine("Invalid jwt inside integration test");
             return Unauthorized();
         }
-        
         var post = _mapper.Map<ViewPost>(postCreateDto);
         await _repo.CreatePost(post);
         _repo.SaveChanges();
         var postViewDto = _mapper.Map<PostViewDto>(post);
         return CreatedAtRoute(nameof(GetPostById), new { Id = postViewDto.PostId }, postViewDto);
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("test/{id}", Name = "GetTestPostById")]
+    public async Task<ActionResult<PostViewDto>> GetTestPostById(int id)
+    {
+        if (!IntegrationMode)
+        {
+            return NotFound();
+        }
+        if (!IsValidJwt())
+        {
+            Console.WriteLine("Invalid jwt inside integration test");
+            return Unauthorized();
+        }
+        var postItem = await _repo.GetPostByIdAsync(id); // Await the async method
+
+        if (postItem != null)
+        {
+            return Ok(_mapper.Map<PostViewDto>(postItem));
+        }
+
+        return NotFound(); // Return 404 if no post is found
     }
 }
