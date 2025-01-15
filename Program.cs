@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using PostQueryService.AsyncDataServices;
 using PostQueryService.Data;
@@ -27,18 +28,81 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 if (builder.Environment.IsProduction())
 {
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("PostgressConn")));
+    var dbUser = Environment.GetEnvironmentVariable("POSTGRES_USER");
+    var dbHost = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+    var dbPort = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+    var dbPassword = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+
+    if (string.IsNullOrEmpty(dbUser) || string.IsNullOrEmpty(dbHost) || string.IsNullOrEmpty(dbPort) ||
+        string.IsNullOrEmpty(dbPassword))
+    {
+        
+        Console.WriteLine("One of the string values for Postgres are empty");
+        Console.WriteLine($"Host={dbHost};Port={dbPort};Database=Users;Username={dbUser};Password={dbPassword};Trust Server Certificate=true;");
+        
+    }
+    
+    builder.Configuration["ConnectionStrings:PostgressConn"] = $"Host={dbHost};Port={dbPort};Database=Posts;Username={dbUser};Password={dbPassword};Trust Server Certificate=true;";
 }
 else
 {
-    Console.WriteLine("--> Using PostgreSQL Server");
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("PostgressConn")));
+    Console.WriteLine("---> Using InMemory database");
+    builder.Services.AddDbContext<AppDbContext>(opt => 
+        opt.UseInMemoryDatabase("InMem")); 
     
     // builder.Services.AddDbContext<AppDbContext>(opt => 
     //     opt.UseInMemoryDatabase("InMem")); 
 }
+var integrationMode = builder.Configuration.GetValue<bool>("IntegrationMode");
+if (!integrationMode)
+{
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(options =>
+    {
+        Console.WriteLine("---> Using Keycloak stuff");
+        Console.WriteLine(builder.Configuration["Keycloak:Authority"]);
+        Console.WriteLine(builder.Configuration["Keycloak:Audience"]);
+    
+        options.Authority = builder.Configuration["Keycloak:Authority"]; // Keycloak realm URL
+        options.Audience = builder.Configuration["Keycloak:Audience"];   // Client ID
+        options.RequireHttpsMetadata = false;            // Disable for development
+    
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Keycloak:Authority"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Keycloak:Audience"],
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true
+        }; 
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("Token validated successfully");
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                Console.WriteLine($"Token challenge triggered: {context.Error}, {context.ErrorDescription}");
+                return Task.CompletedTask;
+            }
+        };
+    
+    }); 
+}
+builder.Services.AddAuthorization();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -48,6 +112,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("AllowAllOrigins");
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseRouting();
 app.MapControllers(); 
 app.MapMetrics();

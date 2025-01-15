@@ -109,3 +109,12 @@ C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\obj\Debug\
 C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\obj\Debug\net8.0\PostQueryService.genruntimeconfig.cache
 C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\obj\Debug\net8.0\ref\PostQueryService.dll
 C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\obj\Debug\net8.0\PostQueryService.sourcelink.json
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Frizb\OneDrive\Documenten\HobbyHub\HobbyHub\PostQueryService\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
