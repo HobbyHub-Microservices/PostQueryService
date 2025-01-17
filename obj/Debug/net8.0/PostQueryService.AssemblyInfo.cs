@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PostQueryService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+52876e52a79fa2922253f444596460ea19508317")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc39249484885e5ac3220cf5b920f39a4158c9c4")]
 [assembly: System.Reflection.AssemblyProductAttribute("PostQueryService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PostQueryService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
